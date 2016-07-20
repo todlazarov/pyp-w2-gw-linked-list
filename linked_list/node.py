@@ -16,7 +16,6 @@ class Node(object):
                 return True
         except:
             return False
-            
 
     def __repr__(self):
         pass

@@ -27,26 +27,25 @@ class LinkedList(AbstractLinkedList):
         return self.length
 
     def __iter__(self):
+        self.current = self.start
         return self
 
     def __getitem__(self, index):
         ans = 0
-        self.current = self.start
         for idx, element in enumerate(self):
             if idx == index:
-                self.current = self.start
                 return element
 
     def __add__(self, other):
-        # we need to copy the lists to avoid modifying either of them
         if not self:
-            new = deepcopy(other)
+            return deepcopy(other)
         else:
-            new = deepcopy(self)
-            new.length += other.length
-            new.end.next = other.start
-            new.end = other.end
-        return new
+            self_copy = deepcopy(self)
+            other_copy = deepcopy(other)
+            self_copy.length += other_copy.length
+            self_copy.end.next = other_copy.start
+            self_copy.end = other_copy.end
+        return self_copy
 
     def __iadd__(self, other):
         self = self + deepcopy(other)
@@ -54,8 +53,7 @@ class LinkedList(AbstractLinkedList):
 
     def __eq__(self, other):
         try:
-            ans = str(self) == str(other)
-            return ans
+            return str(self) == str(other)
         except:
             return False
             
@@ -94,7 +92,6 @@ class LinkedList(AbstractLinkedList):
     def next(self):
         ans = self.current
         if not ans:
-            self.current = self.start
             raise StopIteration
         self.current = self.current.next
         return ans
