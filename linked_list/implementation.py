@@ -52,10 +52,12 @@ class LinkedList(AbstractLinkedList):
         return self
 
     def __eq__(self, other):
-        try:
-            return str(self) == str(other)
-        except:
+        if len(self) != len(other):
             return False
+        for i,j in zip(self,other):
+            if i != j:
+                return False
+        return True
             
     def __ne__(self, other):
         return not (self.__eq__(other))
