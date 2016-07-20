@@ -31,36 +31,45 @@ class LinkedList(AbstractLinkedList):
         return self
 
     def __getitem__(self, index):
+        if index > len(self) - 1:
+            raise IndexError
         ans = 0
         for idx, element in enumerate(self):
             if idx == index:
                 return element
 
     def __add__(self, other):
+        # copies both lists, joins them together 
         if not self:
             return deepcopy(other)
         else:
-            self_copy = deepcopy(self)
+            new_list = deepcopy(self)
             other_copy = deepcopy(other)
-            self_copy.length += other_copy.length
-            self_copy.end.next = other_copy.start
-            self_copy.end = other_copy.end
-        return self_copy
+            new_list.length += other_copy.length
+            new_list.end.next = other_copy.start
+            new_list.end = other_copy.end
+        return new_list
 
     def __iadd__(self, other):
-        self = self + deepcopy(other)
-        return self
+        # same as the add method, but not copying both lists
+        # self = self + other
+        # return self
+        if not self:
+            return deepcopy(other)
+        else:
+            other_copy = deepcopy(other)
+            self.length += other_copy.length
+            self.end.next = other_copy.start
+            self.end = other_copy.end
+            return self
 
     def __eq__(self, other):
         if len(self) != len(other):
             return False
-        for i,j in zip(self,other):
-            if i != j:
-                return False
-        return True
-            
+        return all(i == j for i,j in zip(self,other))
+                    
     def __ne__(self, other):
-        return not (self.__eq__(other))
+        return not self == other
 
     def append(self, elem):
         self.length += 1
@@ -76,10 +85,11 @@ class LinkedList(AbstractLinkedList):
         return len(self)
 
     def pop(self, index=None):
+        if len(self) == 0:
+            raise IndexError
+            
         if index == None:
             index = len(self) - 1
-        if index > len(self) - 1 or index < 0:
-            raise IndexError
             
         ans = self[index].elem
         if index == 0:

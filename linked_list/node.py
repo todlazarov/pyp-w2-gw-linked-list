@@ -11,16 +11,17 @@ class Node(object):
         return str(self.elem)
 
     def __eq__(self, other):
-        if self is None and other is None:
-            return True
-        try:
-            if self.elem == other.elem:
-                return True
-        except:
+        if other is None:
             return False
+        if type(self) is not type(other):
+            return False
+        if type(self.elem) is not type(other.elem):
+            return False
+            
+        return self.elem == other.elem
 
     def __ne__(self,other):
         return not (self == other)
 
     def __repr__(self):
-        pass
+        return str(self.elem)
